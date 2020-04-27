@@ -1,0 +1,61 @@
+image: registry.cafebazaar.ir:5000/common-images/builder:docker-kube
+
+stages:
+  - validation
+  - preprocess
+  - train
+  - evaluation
+  - deploy
+
+variables:
+  GIT_USER: gitlab-ci-token
+  GIT_PASS: ${CI_JOB_TOKEN}
+
+.common_setup: &common_setup_definition
+  before_script:
+    - echo "before script"
+
+
+
+validation_job:
+  stage: validation
+  when: manual
+  <<: *common_setup_definition
+  script:
+  - echo "validation done"
+
+
+preprocess_job:
+  stage: preprocess
+  when: manual
+  <<: *common_setup_definition
+  script:
+  - echo "preprocess done"
+  - make preprocess
+
+train_job:
+  stage: train
+  when: manual
+  <<: *common_setup_definition
+  script:
+  - echo "train done"
+  - make train
+
+
+evaluation_job:
+  stage: evaluation
+  when: manual
+  <<: *common_setup_definition
+  script:
+  - echo "evaluation done"
+  - make evaluation
+  -
+deploy_job:
+  stage: deploy
+  when: manual
+  <<: *common_setup_definition
+  script:
+  - echo "deploy done"
+  - make deploy
+
+
